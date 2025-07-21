@@ -104,6 +104,7 @@ TurtleFrame::TurtleFrame(rclcpp::Node::SharedPtr& node_handle, QWidget* parent, 
   reset_srv_ = nh_->create_service<std_srvs::srv::Empty>("reset", std::bind(&TurtleFrame::resetCallback, this, std::placeholders::_1, std::placeholders::_2));
   spawn_srv_ = nh_->create_service<turtlesim::srv::Spawn>("spawn", std::bind(&TurtleFrame::spawnCallback, this, std::placeholders::_1, std::placeholders::_2));
   kill_srv_ = nh_->create_service<turtlesim::srv::Kill>("kill", std::bind(&TurtleFrame::killCallback, this, std::placeholders::_1, std::placeholders::_2));
+  change_srv_ = nh_->create_service<turtlesim::srv::ChangeImage>("change_image", std::bind(&TurtleFrame::changeImageCallback, this, std::placeholders::_1, std::placeholders::_2));
 
   rclcpp::QoS qos(rclcpp::KeepLast(100), rmw_qos_profile_sensor_data);
   parameter_event_sub_ = nh_->create_subscription<rcl_interfaces::msg::ParameterEvent>(
@@ -292,6 +293,22 @@ bool TurtleFrame::resetCallback(const std_srvs::srv::Empty::Request::SharedPtr, 
   id_counter_ = 0;
   spawnTurtle("", width_in_meters_ / 2.0, height_in_meters_ / 2.0, 0);
   clear();
+  return true;
+}
+
+bool TurtleFrame::changeImageCallback(const turtlesim::srv::ChangeImage::Request::SharedPtr req, turtlesim::srv::ChangeImage::Response::SharedPtr)
+{
+  // Need to check if the name exists in the map or else this will segfault
+  M_Turtle::iterator it = turtles_.find(req->turtle_name);
+  if (it == turtles_.end()) {
+    RCLCPP_INFO(nh_->get_logger(), "Cannot change image, turtle does not exist.");
+    return false;
+  }
+
+  // If index = -1, choose a random image
+  int img_index = (req->img_index == -1) ? rand() % turtle_images_.size() : req->img_index;
+  it->second->changeImage(turtle_images_[img_index]);
+  update();
   return true;
 }
 

@@ -310,4 +310,10 @@ void Turtle::paint(QPainter& painter)
   painter.drawImage(p, turtle_rotated_image_);
 }
 
+void Turtle::changeImage(QImage& new_image)
+{
+  turtle_image_ = new_image;
+  rotateImage();
+}
+
 }

@@ -1,0 +1,4 @@
+string turtle_name  # Name of turtle
+int16 img_index -1  # Index of desired image file in turtlesim/images folder. Set to -1 for a random image.
+                    # Note: Order of images is determined in constructor of turtle_frame.cpp
+---

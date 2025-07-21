@@ -43,6 +43,7 @@
 # include <std_srvs/srv/empty.hpp>
 # include <turtlesim/srv/spawn.hpp>
 # include <turtlesim/srv/kill.hpp>
+# include <turtlesim/srv/change_image.hpp>
 # include <map>
 
 # include "turtle.h"
@@ -76,6 +77,7 @@ private:
   bool resetCallback(const std_srvs::srv::Empty::Request::SharedPtr, std_srvs::srv::Empty::Response::SharedPtr);
   bool spawnCallback(const turtlesim::srv::Spawn::Request::SharedPtr, turtlesim::srv::Spawn::Response::SharedPtr);
   bool killCallback(const turtlesim::srv::Kill::Request::SharedPtr, turtlesim::srv::Kill::Response::SharedPtr);
+  bool changeImageCallback(const turtlesim::srv::ChangeImage::Request::SharedPtr, turtlesim::srv::ChangeImage::Response::SharedPtr);
 
   void parameterEventCallback(const rcl_interfaces::msg::ParameterEvent::ConstSharedPtr);
 
@@ -93,6 +95,7 @@ private:
   rclcpp::Service<std_srvs::srv::Empty>::SharedPtr reset_srv_;
   rclcpp::Service<turtlesim::srv::Spawn>::SharedPtr spawn_srv_;
   rclcpp::Service<turtlesim::srv::Kill>::SharedPtr kill_srv_;
+  rclcpp::Service<turtlesim::srv::ChangeImage>::SharedPtr change_srv_;
   rclcpp::Subscription<rcl_interfaces::msg::ParameterEvent>::SharedPtr parameter_event_sub_;
 
   typedef std::map<std::string, TurtlePtr> M_Turtle;

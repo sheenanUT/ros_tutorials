@@ -29,7 +29,8 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "srv/SetPen.srv"
   "srv/Spawn.srv"
   "srv/TeleportAbsolute.srv"
-  "srv/TeleportRelative.srv")
+  "srv/TeleportRelative.srv"
+  "srv/ChangeImage.srv")
 
 set(dependencies "ament_index_cpp" "geometry_msgs" "rclcpp" "rclcpp_action" "std_msgs" "std_srvs")
 
