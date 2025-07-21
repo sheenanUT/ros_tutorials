@@ -27,7 +27,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "turtlesim/turtle_frame.h"
+#include "turtlesim_ds/turtle_frame.h"
 
 #include <QPointF>
 
@@ -38,7 +38,7 @@
 #define DEFAULT_BG_G 0x56
 #define DEFAULT_BG_B 0xff
 
-namespace turtlesim
+namespace turtlesim_ds
 {
 
 TurtleFrame::TurtleFrame(rclcpp::Node::SharedPtr& node_handle, QWidget* parent, Qt::WindowFlags f)
@@ -49,7 +49,7 @@ TurtleFrame::TurtleFrame(rclcpp::Node::SharedPtr& node_handle, QWidget* parent, 
 , id_counter_(0)
 {
   setFixedSize(500, 500);
-  setWindowTitle("TurtleSim");
+  setWindowTitle("turtlesim_ds");
 
   srand(time(NULL));
 
@@ -88,7 +88,7 @@ TurtleFrame::TurtleFrame(rclcpp::Node::SharedPtr& node_handle, QWidget* parent, 
   turtles.append("humble.png");
   turtles.append("rolling.png");
 
-  QString images_path = (ament_index_cpp::get_package_share_directory("turtlesim") + "/images/").c_str();
+  QString images_path = (ament_index_cpp::get_package_share_directory("turtlesim_ds") + "/images/").c_str();
   for (int i = 0; i < turtles.size(); ++i)
   {
     QImage img;
@@ -102,15 +102,15 @@ TurtleFrame::TurtleFrame(rclcpp::Node::SharedPtr& node_handle, QWidget* parent, 
 
   clear_srv_ = nh_->create_service<std_srvs::srv::Empty>("clear", std::bind(&TurtleFrame::clearCallback, this, std::placeholders::_1, std::placeholders::_2));
   reset_srv_ = nh_->create_service<std_srvs::srv::Empty>("reset", std::bind(&TurtleFrame::resetCallback, this, std::placeholders::_1, std::placeholders::_2));
-  spawn_srv_ = nh_->create_service<turtlesim::srv::Spawn>("spawn", std::bind(&TurtleFrame::spawnCallback, this, std::placeholders::_1, std::placeholders::_2));
-  kill_srv_ = nh_->create_service<turtlesim::srv::Kill>("kill", std::bind(&TurtleFrame::killCallback, this, std::placeholders::_1, std::placeholders::_2));
-  change_srv_ = nh_->create_service<turtlesim::srv::ChangeImage>("change_image", std::bind(&TurtleFrame::changeImageCallback, this, std::placeholders::_1, std::placeholders::_2));
+  spawn_srv_ = nh_->create_service<turtlesim_ds::srv::Spawn>("spawn", std::bind(&TurtleFrame::spawnCallback, this, std::placeholders::_1, std::placeholders::_2));
+  kill_srv_ = nh_->create_service<turtlesim_ds::srv::Kill>("kill", std::bind(&TurtleFrame::killCallback, this, std::placeholders::_1, std::placeholders::_2));
+  change_srv_ = nh_->create_service<turtlesim_ds::srv::ChangeImage>("change_image", std::bind(&TurtleFrame::changeImageCallback, this, std::placeholders::_1, std::placeholders::_2));
 
   rclcpp::QoS qos(rclcpp::KeepLast(100), rmw_qos_profile_sensor_data);
   parameter_event_sub_ = nh_->create_subscription<rcl_interfaces::msg::ParameterEvent>(
     "/parameter_events", qos, std::bind(&TurtleFrame::parameterEventCallback, this, std::placeholders::_1));
 
-  RCLCPP_INFO(nh_->get_logger(), "Starting turtlesim with node name %s", nh_->get_fully_qualified_name());
+  RCLCPP_INFO(nh_->get_logger(), "Starting turtlesim_ds with node name %s", nh_->get_fully_qualified_name());
 
   width_in_meters_ = (width() - 1) / meter_;
   height_in_meters_ = (height() - 1) / meter_;
@@ -134,7 +134,7 @@ TurtleFrame::~TurtleFrame()
   delete update_timer_;
 }
 
-bool TurtleFrame::spawnCallback(const turtlesim::srv::Spawn::Request::SharedPtr req, turtlesim::srv::Spawn::Response::SharedPtr res)
+bool TurtleFrame::spawnCallback(const turtlesim_ds::srv::Spawn::Request::SharedPtr req, turtlesim_ds::srv::Spawn::Response::SharedPtr res)
 {
   std::string name = spawnTurtle(req->name, req->x, req->y, req->theta);
   if (name.empty())
@@ -148,7 +148,7 @@ bool TurtleFrame::spawnCallback(const turtlesim::srv::Spawn::Request::SharedPtr 
   return true;
 }
 
-bool TurtleFrame::killCallback(const turtlesim::srv::Kill::Request::SharedPtr req, turtlesim::srv::Kill::Response::SharedPtr)
+bool TurtleFrame::killCallback(const turtlesim_ds::srv::Kill::Request::SharedPtr req, turtlesim_ds::srv::Kill::Response::SharedPtr)
 {
   M_Turtle::iterator it = turtles_.find(req->name);
   if (it == turtles_.end())
@@ -281,14 +281,14 @@ void TurtleFrame::updateTurtles()
 
 bool TurtleFrame::clearCallback(const std_srvs::srv::Empty::Request::SharedPtr, std_srvs::srv::Empty::Response::SharedPtr)
 {
-  RCLCPP_INFO(nh_->get_logger(), "Clearing turtlesim.");
+  RCLCPP_INFO(nh_->get_logger(), "Clearing turtlesim_ds.");
   clear();
   return true;
 }
 
 bool TurtleFrame::resetCallback(const std_srvs::srv::Empty::Request::SharedPtr, std_srvs::srv::Empty::Response::SharedPtr)
 {
-  RCLCPP_INFO(nh_->get_logger(), "Resetting turtlesim.");
+  RCLCPP_INFO(nh_->get_logger(), "Resetting turtlesim_ds.");
   turtles_.clear();
   id_counter_ = 0;
   spawnTurtle("", width_in_meters_ / 2.0, height_in_meters_ / 2.0, 0);
@@ -296,7 +296,7 @@ bool TurtleFrame::resetCallback(const std_srvs::srv::Empty::Request::SharedPtr, 
   return true;
 }
 
-bool TurtleFrame::changeImageCallback(const turtlesim::srv::ChangeImage::Request::SharedPtr req, turtlesim::srv::ChangeImage::Response::SharedPtr)
+bool TurtleFrame::changeImageCallback(const turtlesim_ds::srv::ChangeImage::Request::SharedPtr req, turtlesim_ds::srv::ChangeImage::Response::SharedPtr)
 {
   // Need to check if the name exists in the map or else this will segfault
   M_Turtle::iterator it = turtles_.find(req->turtle_name);

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(turtlesim)
+project(turtlesim_ds)
 
 if(NOT CMAKE_CXX_STANDARD)
   set(CMAKE_CXX_STANDARD 14)
@@ -40,7 +40,7 @@ set(turtlesim_node_SRCS
   src/turtle_frame.cpp
 )
 set(turtlesim_node_HDRS
-  include/turtlesim/turtle_frame.h
+  include/turtlesim_ds/turtle_frame.h
 )
 
 qt5_wrap_cpp(turtlesim_node_MOCS ${turtlesim_node_HDRS})

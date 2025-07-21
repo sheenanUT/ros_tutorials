@@ -1,11 +1,11 @@
 #include <rclcpp/rclcpp.hpp>
-#include <turtlesim/msg/pose.hpp>
+#include <turtlesim_ds/msg/pose.hpp>
 #include <geometry_msgs/msg/twist.hpp>
 #include <std_srvs/srv/empty.hpp>
 #include <math.h>
 
-turtlesim::msg::Pose g_pose;
-turtlesim::msg::Pose g_goal;
+turtlesim_ds::msg::Pose g_pose;
+turtlesim_ds::msg::Pose g_goal;
 
 enum State
 {
@@ -22,7 +22,7 @@ bool g_first_pose_set = false;
 
 #define PI 3.141592
 
-void poseCallback(const turtlesim::msg::Pose & pose)
+void poseCallback(const turtlesim_ds::msg::Pose & pose)
 {
   g_pose = pose;
   if (!g_first_pose_set)
@@ -156,7 +156,7 @@ int main(int argc, char** argv)
 {
   rclcpp::init(argc, argv);
   auto nh = rclcpp::Node::make_shared("draw_square");
-  auto pose_sub = nh->create_subscription<turtlesim::msg::Pose>("turtle1/pose", 1, std::bind(poseCallback, std::placeholders::_1));
+  auto pose_sub = nh->create_subscription<turtlesim_ds::msg::Pose>("turtle1/pose", 1, std::bind(poseCallback, std::placeholders::_1));
   auto twist_pub = nh->create_publisher<geometry_msgs::msg::Twist>("turtle1/cmd_vel", 1);
   auto reset = nh->create_client<std_srvs::srv::Empty>("reset");
   auto timer = nh->create_wall_timer(std::chrono::milliseconds(16), [twist_pub](){timerCallback(twist_pub);});

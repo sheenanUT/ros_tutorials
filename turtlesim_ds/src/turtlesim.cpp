@@ -31,7 +31,7 @@
 
 #include <rclcpp/rclcpp.hpp>
 
-#include "turtlesim/turtle_frame.h"
+#include "turtlesim_ds/turtle_frame.h"
 
 class TurtleApp : public QApplication
 {
@@ -52,7 +52,7 @@ public:
 
   int exec()
   {
-    turtlesim::TurtleFrame frame(nh_);
+    turtlesim_ds::TurtleFrame frame(nh_);
     frame.show();
 
     return QApplication::exec();

@@ -5,7 +5,7 @@
 #include <rclcpp/rclcpp.hpp>
 #include <rclcpp_action/rclcpp_action.hpp>
 #include <geometry_msgs/msg/twist.hpp>
-#include <turtlesim/action/rotate_absolute.hpp>
+#include <turtlesim_ds/action/rotate_absolute.hpp>
 
 #include <signal.h>
 #include <stdio.h>
@@ -194,7 +194,7 @@ public:
     nh_->declare_parameter("scale_linear", 2.0);
 
     twist_pub_ = nh_->create_publisher<geometry_msgs::msg::Twist>("turtle1/cmd_vel", 1);
-    rotate_absolute_client_ = rclcpp_action::create_client<turtlesim::action::RotateAbsolute>(nh_, "turtle1/rotate_absolute");
+    rotate_absolute_client_ = rclcpp_action::create_client<turtlesim_ds::action::RotateAbsolute>(nh_, "turtle1/rotate_absolute");
   }
 
   int keyLoop()
@@ -312,11 +312,11 @@ private:
 
   void sendGoal(float theta)
   {
-    auto goal = turtlesim::action::RotateAbsolute::Goal();
+    auto goal = turtlesim_ds::action::RotateAbsolute::Goal();
     goal.theta = theta;
-    auto send_goal_options = rclcpp_action::Client<turtlesim::action::RotateAbsolute>::SendGoalOptions();
+    auto send_goal_options = rclcpp_action::Client<turtlesim_ds::action::RotateAbsolute>::SendGoalOptions();
     send_goal_options.goal_response_callback =
-      [this](rclcpp_action::ClientGoalHandle<turtlesim::action::RotateAbsolute>::SharedPtr goal_handle)
+      [this](rclcpp_action::ClientGoalHandle<turtlesim_ds::action::RotateAbsolute>::SharedPtr goal_handle)
       {
         RCLCPP_DEBUG(nh_->get_logger(), "Goal response received");
         this->goal_handle_ = goal_handle;
@@ -342,8 +342,8 @@ private:
 
   rclcpp::Node::SharedPtr nh_;
   rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr twist_pub_;
-  rclcpp_action::Client<turtlesim::action::RotateAbsolute>::SharedPtr rotate_absolute_client_;
-  rclcpp_action::ClientGoalHandle<turtlesim::action::RotateAbsolute>::SharedPtr goal_handle_;
+  rclcpp_action::Client<turtlesim_ds::action::RotateAbsolute>::SharedPtr rotate_absolute_client_;
+  rclcpp_action::ClientGoalHandle<turtlesim_ds::action::RotateAbsolute>::SharedPtr goal_handle_;
 
   KeyboardReader input_;
 };

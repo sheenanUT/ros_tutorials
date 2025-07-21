@@ -27,8 +27,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef TURTLESIM_TURTLE_H
-#define TURTLESIM_TURTLE_H
+#ifndef turtlesim_ds_TURTLE_H
+#define turtlesim_ds_TURTLE_H
 
 // This prevents a MOC error with versions of boost >= 1.48
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829
@@ -36,12 +36,12 @@
 # include <rclcpp_action/rclcpp_action.hpp>
 
 # include <geometry_msgs/msg/twist.hpp>
-# include <turtlesim/action/rotate_absolute.hpp>
-# include <turtlesim/msg/color.hpp>
-# include <turtlesim/msg/pose.hpp>
-# include <turtlesim/srv/set_pen.hpp>
-# include <turtlesim/srv/teleport_absolute.hpp>
-# include <turtlesim/srv/teleport_relative.hpp>
+# include <turtlesim_ds/action/rotate_absolute.hpp>
+# include <turtlesim_ds/msg/color.hpp>
+# include <turtlesim_ds/msg/pose.hpp>
+# include <turtlesim_ds/srv/set_pen.hpp>
+# include <turtlesim_ds/srv/teleport_absolute.hpp>
+# include <turtlesim_ds/srv/teleport_relative.hpp>
 #endif
 
 #include <QImage>
@@ -52,13 +52,13 @@
 #define PI 3.14159265
 #define TWO_PI 2.0 * PI
 
-namespace turtlesim
+namespace turtlesim_ds
 {
 
 class Turtle
 {
 public:
-  using RotateAbsoluteGoalHandle = rclcpp_action::ServerGoalHandle<turtlesim::action::RotateAbsolute>;
+  using RotateAbsoluteGoalHandle = rclcpp_action::ServerGoalHandle<turtlesim_ds::action::RotateAbsolute>;
 
   Turtle(rclcpp::Node::SharedPtr& nh, const std::string& real_name, const QImage& turtle_image, const QPointF& pos, float orient);
 
@@ -67,9 +67,9 @@ public:
   void changeImage(QImage &new_image);
 private:
   void velocityCallback(const geometry_msgs::msg::Twist::ConstSharedPtr vel);
-  bool setPenCallback(const turtlesim::srv::SetPen::Request::SharedPtr, turtlesim::srv::SetPen::Response::SharedPtr);
-  bool teleportRelativeCallback(const turtlesim::srv::TeleportRelative::Request::SharedPtr, turtlesim::srv::TeleportRelative::Response::SharedPtr);
-  bool teleportAbsoluteCallback(const turtlesim::srv::TeleportAbsolute::Request::SharedPtr, turtlesim::srv::TeleportAbsolute::Response::SharedPtr);
+  bool setPenCallback(const turtlesim_ds::srv::SetPen::Request::SharedPtr, turtlesim_ds::srv::SetPen::Response::SharedPtr);
+  bool teleportRelativeCallback(const turtlesim_ds::srv::TeleportRelative::Request::SharedPtr, turtlesim_ds::srv::TeleportRelative::Response::SharedPtr);
+  bool teleportAbsoluteCallback(const turtlesim_ds::srv::TeleportAbsolute::Request::SharedPtr, turtlesim_ds::srv::TeleportAbsolute::Response::SharedPtr);
   void rotateAbsoluteAcceptCallback(const std::shared_ptr<RotateAbsoluteGoalHandle>);
 
   void rotateImage();
@@ -89,16 +89,16 @@ private:
   QPen pen_;
 
   rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr velocity_sub_;
-  rclcpp::Publisher<turtlesim::msg::Pose>::SharedPtr pose_pub_;
-  rclcpp::Publisher<turtlesim::msg::Color>::SharedPtr color_pub_;
-  rclcpp::Service<turtlesim::srv::SetPen>::SharedPtr set_pen_srv_;
-  rclcpp::Service<turtlesim::srv::TeleportRelative>::SharedPtr teleport_relative_srv_;
-  rclcpp::Service<turtlesim::srv::TeleportAbsolute>::SharedPtr teleport_absolute_srv_;
-  rclcpp_action::Server<turtlesim::action::RotateAbsolute>::SharedPtr rotate_absolute_action_server_;
+  rclcpp::Publisher<turtlesim_ds::msg::Pose>::SharedPtr pose_pub_;
+  rclcpp::Publisher<turtlesim_ds::msg::Color>::SharedPtr color_pub_;
+  rclcpp::Service<turtlesim_ds::srv::SetPen>::SharedPtr set_pen_srv_;
+  rclcpp::Service<turtlesim_ds::srv::TeleportRelative>::SharedPtr teleport_relative_srv_;
+  rclcpp::Service<turtlesim_ds::srv::TeleportAbsolute>::SharedPtr teleport_absolute_srv_;
+  rclcpp_action::Server<turtlesim_ds::action::RotateAbsolute>::SharedPtr rotate_absolute_action_server_;
 
   std::shared_ptr<RotateAbsoluteGoalHandle> rotate_absolute_goal_handle_;
-  std::shared_ptr<turtlesim::action::RotateAbsolute::Feedback> rotate_absolute_feedback_;
-  std::shared_ptr<turtlesim::action::RotateAbsolute::Result> rotate_absolute_result_;
+  std::shared_ptr<turtlesim_ds::action::RotateAbsolute::Feedback> rotate_absolute_feedback_;
+  std::shared_ptr<turtlesim_ds::action::RotateAbsolute::Result> rotate_absolute_result_;
   qreal rotate_absolute_start_orient_;
 
   rclcpp::Time last_command_time_;
