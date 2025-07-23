@@ -87,6 +87,7 @@ TurtleFrame::TurtleFrame(rclcpp::Node::SharedPtr& node_handle, QWidget* parent, 
   turtles.append("galactic.png");
   turtles.append("humble.png");
   turtles.append("rolling.png");
+  turtles.append("rolling_gray.png");
 
   QString images_path = (ament_index_cpp::get_package_share_directory("turtlesim_ds") + "/images/").c_str();
   for (int i = 0; i < turtles.size(); ++i)
@@ -114,7 +115,7 @@ TurtleFrame::TurtleFrame(rclcpp::Node::SharedPtr& node_handle, QWidget* parent, 
 
   width_in_meters_ = (width() - 1) / meter_;
   height_in_meters_ = (height() - 1) / meter_;
-  spawnTurtle("", width_in_meters_ / 2.0, height_in_meters_ / 2.0, 0);
+  spawnTurtle("", width_in_meters_ / 2.0, height_in_meters_ / 2.0, 0, 9);
 
   // spawn all available turtle types
   if(false)
@@ -136,7 +137,9 @@ TurtleFrame::~TurtleFrame()
 
 bool TurtleFrame::spawnCallback(const turtlesim_ds::srv::Spawn::Request::SharedPtr req, turtlesim_ds::srv::Spawn::Response::SharedPtr res)
 {
-  std::string name = spawnTurtle(req->name, req->x, req->y, req->theta);
+  std::string name;
+  if (req->img_index == -1) spawnTurtle(req->name, req->x, req->y, req->theta);
+  else name = spawnTurtle(req->name, req->x, req->y, req->theta, req->img_index);
   if (name.empty())
   {
     RCLCPP_ERROR(nh_->get_logger(), "A turtle named [%s] already exists", req->name.c_str());

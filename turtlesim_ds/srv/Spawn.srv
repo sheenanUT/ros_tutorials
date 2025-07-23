@@ -2,5 +2,6 @@ float32 x
 float32 y
 float32 theta
 string name # Optional.  A unique name will be created and returned if this is empty
+int16 img_index -1  # Index of desired image file in turtlesim_ds/images folder. Set to -1 for a random image.
 ---
 string name
