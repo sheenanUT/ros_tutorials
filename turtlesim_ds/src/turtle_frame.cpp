@@ -138,7 +138,7 @@ TurtleFrame::~TurtleFrame()
 bool TurtleFrame::spawnCallback(const turtlesim_ds::srv::Spawn::Request::SharedPtr req, turtlesim_ds::srv::Spawn::Response::SharedPtr res)
 {
   std::string name;
-  if (req->img_index == -1) spawnTurtle(req->name, req->x, req->y, req->theta);
+  if (req->img_index == -1) name = spawnTurtle(req->name, req->x, req->y, req->theta);
   else name = spawnTurtle(req->name, req->x, req->y, req->theta, req->img_index);
   if (name.empty())
   {
@@ -206,7 +206,7 @@ std::string TurtleFrame::spawnTurtle(const std::string& name, float x, float y, 
     }
   }
 
-  TurtlePtr t = std::make_shared<Turtle>(nh_, real_name, turtle_images_[static_cast<int>(index)], QPointF(x, height_in_meters_ - y), angle);
+  TurtlePtr t = std::make_shared<Turtle>(nh_, real_name, turtle_images_[static_cast<int>(index)], QPointF(x, height_in_meters_ - y), angle, meter_);
   turtles_[real_name] = t;
   update();
 

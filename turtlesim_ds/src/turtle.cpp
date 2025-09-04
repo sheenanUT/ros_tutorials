@@ -46,11 +46,12 @@ static double normalizeAngle(double angle)
   return angle - (TWO_PI * std::floor((angle + PI) / (TWO_PI)));
 }
 
-Turtle::Turtle(rclcpp::Node::SharedPtr& nh, const std::string& real_name, const QImage& turtle_image, const QPointF& pos, float orient)
+Turtle::Turtle(rclcpp::Node::SharedPtr& nh, const std::string& real_name, const QImage& turtle_image, const QPointF& pos, float orient, float meter)
 : nh_(nh)
 , turtle_image_(turtle_image)
 , pos_(pos)
 , orient_(orient)
+, meter_(meter)
 , lin_vel_x_(0.0)
 , lin_vel_y_(0.0)
 , ang_vel_(0.0)
@@ -83,7 +84,6 @@ Turtle::Turtle(rclcpp::Node::SharedPtr& nh, const std::string& real_name, const 
 
   last_command_time_ = nh_->now();
 
-  meter_ = turtle_image_.height();
   rotateImage();
 }
 
